@@ -1,0 +1,7 @@
+{
+	"realm": "fullstack-test",
+	"bearer-only": true,
+	"auth-server-url": "http://localhost:8088/auth",
+	"ssl-required": "external",
+	"resource": "fullstack-test-api"
+  }
