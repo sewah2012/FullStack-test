@@ -9,7 +9,7 @@
     "lint": "eslint src*/**/*.js --quiet",
     "lint:fix": "yarn lint --fix",
     "lint:watch": "yarn lint --watch",
-    "prettier":"prettier --write ./src/**/*/.{js,json}"
+    "prettier": "prettier --write ./src/**/*.{js,ts,json}"
   },
   "author": "Emmanuel Sahr Sewah",
   "license": "ISC",
@@ -22,7 +22,8 @@
     "elasticsearch": "^16.7.2",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "keycloak-connect": "^15.1.0"
+    "keycloak-connect": "^15.1.0",
+    "mongoose": "^6.1.1"
   },
   "devDependencies": {
     "@babel/preset-es2015": "^7.0.0-beta.53",

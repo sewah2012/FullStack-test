@@ -18,17 +18,17 @@ export default (app) => {
       resave: false,
       saveUninitialized: true,
       store: memoryStore,
-    }),
+    })
   )
   app.use(
     keycloak.middleware({
       logout: '/logout',
       admin: '/',
-    }),
+    })
   )
 
   app.get('/', (req, res) =>
-    res.json({ message: 'Youre hitting the / route.' }),
+    res.json({ message: 'Youre hitting the / route.' })
   )
   app.use('/auth', authRouter)
   app.use('/question', questionRouter)
