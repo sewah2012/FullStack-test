@@ -1,9 +1,10 @@
-import client from '../../config/elasticSearch'
+import elasticSearch from '../../config/elasticSearch'
 import Question from '../models/question'
 
-const getAllQuestions = (req, res) => {
-  // res.json({ message: 'list of all questions questions' })
+const client = elasticSearch.client
+elasticSearch.pingEsClient(client)
 
+const getAllQuestions = (req, res) => {
   Question.find()
     .exec()
     .then((resp) => res.status(200).json(resp))
@@ -15,9 +16,29 @@ const getAllQuestions = (req, res) => {
     })
 }
 
-const getSingleQuestion = (req, res) => {
-  // res.json({ message: 'get single question' })
+const getAllByLocation = (req, res) => {
+  const searchText = req.query.location
 
+  client
+    .search({
+      index: 'questions',
+      body: {
+        query: {
+          bool: {
+            must: { match: { 'quest.location.name': searchText.trim() } },
+          },
+        },
+      },
+    })
+    .then((response) => {
+      return res.json({ result: response.body.hits.hits })
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: 'Error' })
+    })
+}
+
+const getSingleQuestion = (req, res) => {
   const questioniId = req.params.questionId
 
   Question.findById(questioniId)
@@ -40,7 +61,7 @@ const postQuestion = (req, res) => {
     location: req.body.location,
   }
 
-  Question.create(quest, (err, data) => {
+  Question.create(quest, (err, q) => {
     if (err) {
       return res.status(500).json({
         msg: 'Error',
@@ -48,18 +69,20 @@ const postQuestion = (req, res) => {
       })
     }
 
-    quest.questionId = data._id.toString() // adds document id to the question before indexing it to elastic search
     //indexed le question apres le sauvagarder dans mongoDB
-
     client
       .index({
         index: 'questions',
-        body: quest,
+        id: q._id.toString(),
+        body: {
+          quest,
+        },
       })
       .then((question) => {
-        return res
-          .status(200)
-          .json({ msg: 'question indexed and saved', question })
+        return res.status(200).json({
+          msg: 'question indexed and saved',
+          result: question.body.result,
+        })
       })
       .catch((err) => {
         return res.status(500).json({
@@ -79,7 +102,35 @@ const postResponse = (req, res) => {
     { $push: { reponse: response } },
     (error, success) => {
       if (!error) {
-        return res.status(200).json({ msg: 'Response added successfully!' })
+        //To DO//
+        //update index of elastic search
+        const quest = {
+          title: success.title,
+          content: success.content,
+          ownerId: success.ownerId,
+          response: success.reponse,
+          location: success.location,
+        }
+
+        // update the index of this question in elastic search
+        client
+          .index({
+            index: 'questions',
+            id: questionId,
+            body: { quest },
+          })
+          .then((question) => {
+            return res.status(200).json({
+              msg: 'Response successfully added and indexed',
+              data: question.body.result,
+            })
+          })
+          .catch((err) => {
+            return res.status(500).json({
+              msg: 'Error',
+              err,
+            })
+          })
       } else {
         console.log(error)
       }
@@ -112,6 +163,7 @@ const researchQuestion = (req, res) => {
 
 export default {
   getAllQuestions,
+  getAllByLocation,
   getSingleQuestion,
   postQuestion,
   postResponse,

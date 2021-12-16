@@ -1,14 +1,13 @@
 import routes from './src/api-routes/startup/routes'
 import express from 'express'
 import mongoose from 'mongoose'
-
-import Question from './src/models/question'
+import dotEnv from './config/dotEnv'
 
 const app = express()
 
-const PORT = process.env.PORT || 8090
+const PORT = dotEnv.node_server_port || 8090
 
-mongoose.connect(process.env.MONGODB_URL, {})
+mongoose.connect(dotEnv.mongodb_ur, {})
 
 mongoose.set('debug', true)
 

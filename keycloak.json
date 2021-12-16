@@ -1,7 +1,15 @@
+
+
 {
 	"realm": "fullstack-test",
-	"bearer-only": true,
-	"auth-server-url": "http://localhost:8088/auth",
+	"auth-server-url": "http://localhost:8088/auth/",
 	"ssl-required": "external",
-	"resource": "fullstack-test-api"
+	"resource": "fullstack-test-api",
+	"verify-token-audience": true,
+	"credentials": {
+	  "secret": "404d51e7-3c06-49ea-ab18-77e6d3b3b444"
+	},
+	"use-resource-role-mappings": true,
+	"confidential-port": 0,
+	"policy-enforcer": {}
   }

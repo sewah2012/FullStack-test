@@ -1,8 +1,8 @@
 import express from 'express'
 import session from 'express-session'
 import Keycloak from 'keycloak-connect'
-// import { initKeycloak, getKeycloak } from '../../config/keycloack'
 import bodyParser from 'body-parser'
+import dotEnv from '../../../config/dotEnv'
 import authRouter from '../routes/auth'
 import questionRouter from '../routes/question'
 
@@ -14,21 +14,21 @@ export default (app) => {
   app.use(bodyParser.json())
   app.use(
     session({
-      secret: '404d51e7-3c06-49ea-ab18-77e6d3b3b444',
+      secret: dotEnv.Kc_secret_key,
       resave: false,
       saveUninitialized: true,
       store: memoryStore,
-    })
+    }),
   )
   app.use(
     keycloak.middleware({
       logout: '/logout',
       admin: '/',
-    })
+    }),
   )
 
   app.get('/', (req, res) =>
-    res.json({ message: 'Youre hitting the / route.' })
+    res.json({ message: 'Youre hitting the / route.' }),
   )
   app.use('/auth', authRouter)
   app.use('/question', questionRouter)

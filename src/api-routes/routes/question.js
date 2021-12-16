@@ -5,6 +5,7 @@ import questionController from '../../controller/question.controller'
 const questionRouter = express.Router()
 
 questionRouter.get('/all', questionController.getAllQuestions)
+questionRouter.get('/research/location', questionController.getAllByLocation)
 questionRouter.get(
   '/question/:questionId',
   questionController.getSingleQuestion,
