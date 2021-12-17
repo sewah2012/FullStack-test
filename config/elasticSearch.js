@@ -22,21 +22,10 @@ const pingEsClient = (client) => {
     //   body: {
     //     properties: {
     //       location: {
-    //         type: 'nested',
-    //         properties: {
-    //           name: {
-    //             type: 'text',
-    //           },
-    //           longitude: {
-    //             type: 'integer',
-    //           },
-    //           latitude: {
-    //             type: 'integer',
-    //           },
-    //         },
+    //         type: 'geo_point',
     //       },
     //       response: {
-    //         type: 'nested',
+    //         type: 'object',
     //         properties: {
     //           author: { type: 'text' },
     //           response: { type: 'text' },

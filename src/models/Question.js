@@ -5,8 +5,8 @@ const questionSchema = mongoose.Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     ownerId: { type: String, required: true },
-    reponse: { type: Array, default: [] },
-    location: { name: String, long: Number, lat: Number },
+    response: { type: Array, default: [] },
+    location: { lon: Number, lat: Number },
   },
   { timestamps: true },
 )

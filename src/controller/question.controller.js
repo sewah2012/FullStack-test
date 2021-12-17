@@ -17,21 +17,33 @@ const getAllQuestions = (req, res) => {
 }
 
 const getAllByLocation = (req, res) => {
-  const searchText = req.query.location
-
+  const lat = req.query.lat
+  const lon = req.query.lon
   client
     .search({
       index: 'questions',
       body: {
         query: {
-          bool: {
-            must: { match: { 'quest.location.name': searchText.trim() } },
-          },
+          match_all: {},
         },
+        sort: [
+          {
+            _geo_distance: {
+              location: {
+                lat: lat,
+                lon: lon,
+              },
+              order: 'asc',
+              mode: 'min',
+              unit: 'km',
+              distance_type: 'arc',
+            },
+          },
+        ],
       },
     })
     .then((response) => {
-      return res.json({ result: response.body.hits.hits })
+      return res.json({ results: response.body.hits.hits })
     })
     .catch((err) => {
       return res.status(500).json({ message: 'Error' })
@@ -74,14 +86,12 @@ const postQuestion = (req, res) => {
       .index({
         index: 'questions',
         id: q._id.toString(),
-        body: {
-          quest,
-        },
+        body: quest,
       })
       .then((question) => {
         return res.status(200).json({
           msg: 'question indexed and saved',
-          result: question.body.result,
+          results: question.body.result,
         })
       })
       .catch((err) => {
@@ -99,7 +109,7 @@ const postResponse = (req, res) => {
 
   Question.findOneAndUpdate(
     { _id: questionId },
-    { $push: { reponse: response } },
+    { $push: { response: response } },
     (error, success) => {
       if (!error) {
         //To DO//
@@ -108,7 +118,7 @@ const postResponse = (req, res) => {
           title: success.title,
           content: success.content,
           ownerId: success.ownerId,
-          response: success.reponse,
+          response: success.response,
           location: success.location,
         }
 
@@ -117,7 +127,7 @@ const postResponse = (req, res) => {
           .index({
             index: 'questions',
             id: questionId,
-            body: { quest },
+            body: quest,
           })
           .then((question) => {
             return res.status(200).json({
