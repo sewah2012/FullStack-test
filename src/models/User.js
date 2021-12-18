@@ -5,7 +5,9 @@ const userSchema = mongoose.Schema(
     username: { type: String, required: true },
     password: { type: String, required: true },
     likes: { type: Array, default: [] },
-    location: { name: String, long: Number, lat: Number },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
+    email: { type: String, required: true },
   },
   { timestamps: true },
 )

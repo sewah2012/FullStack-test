@@ -2,6 +2,7 @@ import routes from './src/api-routes/startup/routes'
 import express from 'express'
 import mongoose from 'mongoose'
 import dotEnv from './config/dotEnv'
+
 var cors = require('cors')
 
 const app = express()
