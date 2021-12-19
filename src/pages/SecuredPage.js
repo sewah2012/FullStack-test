@@ -4,10 +4,12 @@ import Demande from '../components/Demande'
 import ListeQuestion from '../components/ListeQuestion'
 import axios from 'axios'
 import SearchHits from '../components/SearchHits'
+import getQuestions from '../helpers/axiosRequest'
 
 const Secured = () => {
-  const [isSearching, setIsSearching] = useState(false)
   const [isLoading, setisLoading] = useState(true)
+  const [isSearching, setIsSearching] = useState(false)
+
   const [questions, setQuestions] = useState([])
   const [searchHits, setSearchHits] = useState([])
 
@@ -24,22 +26,10 @@ const Secured = () => {
         lon: position.coords.longitude,
       })
     })
-    axios
-      .get(url)
-      .then((res) => {
-        if (res) {
-          if (res) {
-            setQuestions(res.data.results)
-            setisLoading(false)
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    getQuestions(setQuestions, myPosition, setisLoading)
 
     return () => {}
-  }, [isLoading, url])
+  }, [isLoading, myPosition, url])
 
   const onSearch = (searchTerm) => {
     setisLoading(true)
@@ -74,12 +64,10 @@ const Secured = () => {
 
         {isSearching ? (
           <SearchHits results={searchHits} />
+        ) : isLoading ? (
+          <h1>loading ...</h1>
         ) : (
-          <ListeQuestion
-            questions={questions}
-            isLoading={isLoading}
-            className="flex-1 mlr-5"
-          />
+          <ListeQuestion questions={questions} className="flex-1 mlr-5" />
         )}
       </div>
     </div>

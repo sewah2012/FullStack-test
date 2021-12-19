@@ -1,11 +1,13 @@
 import axios from 'axios'
 
-const getQuestions = async (url, token) => {
+const getQuestions = async (setQuestions, myPosition, setisLoading) => {
+  const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}`
   axios
     .get(url)
     .then((res) => {
       if (res) {
-        return res.data
+        setQuestions(res.data.results)
+        setisLoading(false)
       }
     })
     .catch((err) => {

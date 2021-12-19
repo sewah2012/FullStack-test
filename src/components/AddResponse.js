@@ -35,7 +35,6 @@ const AddResponse = ({ questionId }) => {
           setResponseText({ response: '', author: loggedInUser })
 
           setaddingQuestion(false)
-          window.location.reload(true)
         }
         setaddingQuestion(false)
       })

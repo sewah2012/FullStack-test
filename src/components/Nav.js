@@ -1,7 +1,7 @@
 import React from 'react'
-import { useKeycloak } from '@react-keycloak/web'
-const Nav = () => {
-  const { keycloak, initialized } = useKeycloak()
+import { Link } from 'react-router-dom'
+
+const Nav = ({ keycloak }) => {
   return (
     <div>
       <div className="top-0 w-full flex flex-wrap">
@@ -14,14 +14,14 @@ const Nav = () => {
               {keycloak.authenticated && (
                 <div className=" flex flex-wrapmd:flex px-4 mx-auto font-semibold font-heading space-x-12">
                   <div>
-                    <a className="hover:text-blue-800" href="/home">
+                    <Link className="hover:text-blue-800" to="/home">
                       Home
-                    </a>
+                    </Link>
                   </div>
                   <div>
-                    <a className="hover:text-blue-800" href="/favoris">
+                    <Link className="hover:text-blue-800" to="/favoris">
                       Mes Favoris
-                    </a>
+                    </Link>
                   </div>
                 </div>
               )}
