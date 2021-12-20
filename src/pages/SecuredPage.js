@@ -29,7 +29,7 @@ const Secured = () => {
     getQuestions(setQuestions, myPosition, setisLoading)
 
     return () => {}
-  }, [isLoading, myPosition, url])
+  }, [])
 
   const onSearch = (searchTerm) => {
     setisLoading(true)
@@ -55,6 +55,17 @@ const Secured = () => {
     setIsSearching(!isSearching)
   }
 
+  const fetchMore = async (sortValue, tieBreaker) => {
+    setisLoading(true)
+    const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}&sortValue=${sortValue}&tieBreaker=${tieBreaker}`
+    const response = await axios.get(url)
+    if (response) {
+      setQuestions(response.data.results)
+
+      console.log(response.data.results)
+      setisLoading(false)
+    }
+  }
   return (
     <div className="bg-gray-50 pt-5">
       <Search onSearch={onSearch} />
@@ -67,7 +78,11 @@ const Secured = () => {
         ) : isLoading ? (
           <h1>loading ...</h1>
         ) : (
-          <ListeQuestion questions={questions} className="flex-1 mlr-5" />
+          <ListeQuestion
+            fetchMore={fetchMore}
+            questions={questions}
+            className="flex-1 mlr-5"
+          />
         )}
       </div>
     </div>
