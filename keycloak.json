@@ -7,7 +7,7 @@
 	"resource": "fullstack-test-api",
 	"verify-token-audience": true,
 	"credentials": {
-	  "secret": "404d51e7-3c06-49ea-ab18-77e6d3b3b444"
+	  "secret": "3935a5c3-213f-4a31-be8f-393477979e3b"
 	},
 	"use-resource-role-mappings": true,
 	"confidential-port": 0,

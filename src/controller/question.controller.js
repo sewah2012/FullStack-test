@@ -36,7 +36,7 @@ const getAllByLocation = async (req, res) => {
     .search({
       // index: 'questions',  //no need for index when using PIT
       body: {
-        size: '1',
+        size: '5',
         track_total_hits: false, // for fast query
         query: {
           match_all: {},

@@ -3,7 +3,6 @@ import session from 'express-session'
 import Keycloak from 'keycloak-connect'
 import bodyParser from 'body-parser'
 import dotEnv from '../../../config/dotEnv'
-import authRouter from '../routes/auth'
 import questionRouter from '../routes/question'
 
 const memoryStore = new session.MemoryStore()
@@ -30,8 +29,8 @@ export default (app) => {
   app.get('/', (req, res) =>
     res.json({ message: 'Youre hitting the / route.' }),
   )
-  app.use('/auth', authRouter)
-  app.use('/question', questionRouter)
+
+  app.use('/question', keycloak.protect('user'), questionRouter)
 }
 
 // keycloak.protect('user')
