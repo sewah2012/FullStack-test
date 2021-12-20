@@ -6,10 +6,13 @@ import WelcomePage from './pages/Homepage'
 import SecuredPage from './pages/SecuredPage'
 import Favorites from './pages/Favorites'
 import { useKeycloak } from '@react-keycloak/web'
+import axios from 'axios'
 
 function App() {
   const { keycloak } = useKeycloak()
   const isAuth = keycloak.authenticated
+
+  axios.defaults.headers.common['Authorization'] = `Bearer ${keycloak.idToken}`
   return (
     <div>
       <BrowserRouter>
