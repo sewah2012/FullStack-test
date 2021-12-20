@@ -23,13 +23,3 @@ app.listen(PORT, (err) => {
     console.log(`APP Listen to port : ${PORT}`)
   }
 })
-
-// Question.create({
-//   title: 'question 1',
-//   content: 'question content ',
-//   location: {
-//     name: 'rabat',
-//     longitude: '',
-//     latitude: '',
-//   },
-// })

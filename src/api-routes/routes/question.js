@@ -15,7 +15,7 @@ questionRouter.post('/post', questionController.postQuestion)
 questionRouter.get('/research', questionController.researchQuestion)
 
 questionRouter.post('/like', questionController.likeQuestion)
-questionRouter.post('/unlike/', questionController.unLikeQuestion)
-questionRouter.get('/likes/', questionController.getUsersLikes)
+questionRouter.post('/unlike', questionController.unLikeQuestion)
+questionRouter.get('/likes', questionController.getUsersLikes)
 
 export default questionRouter

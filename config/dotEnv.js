@@ -2,8 +2,12 @@ const result = require('dotenv').config()
 
 export default {
   esc_username: process.env.ELASTIC_SEARCH_CLOUD_USERNAME,
-  esc_password: process.env.ELASTIC_SEARCH_PASSWORD,
+  esc_password: process.env.ELASTIC_SEARCH_CLOUD_PASSWORD,
   esc_id: process.env.ELASTIC_SEARCH_CLOUD_ID,
+
+  es_username: process.env.ELASTIC_SEARCH_USERNAME,
+  es_password: process.env.ELASTIC_SEARCH_PASSWORD,
+  es_node: process.env.ELASTIC_SEARCH_NODE,
 
   mongodb_ur: process.env.MONGODB_URL,
 

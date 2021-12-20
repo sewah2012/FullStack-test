@@ -18,15 +18,32 @@ const getAllQuestions = (req, res) => {
     })
 }
 
-const getAllByLocation = (req, res) => {
+const getAllByLocation = async (req, res) => {
   const lat = req.query.lat
   const lon = req.query.lon
+  //PIT Test
+  let pitId = null
+  let searchAfter = null
+
+  pitId = await (
+    await client.openPointInTime({ index: 'questions', keep_alive: '2m' })
+  ).body.id
+
+  if (req.query.sortValue && req.query.tieBreaker) {
+    searchAfter = [req.query.sortValue, req.query.tieBreaker]
+  }
   client
     .search({
-      index: 'questions',
+      // index: 'questions',  //no need for index when using PIT
       body: {
+        size: '1',
+        track_total_hits: false, // for fast query
         query: {
           match_all: {},
+        },
+        pit: {
+          id: pitId,
+          keep_alive: '2m',
         },
         sort: [
           {
@@ -42,6 +59,8 @@ const getAllByLocation = (req, res) => {
             },
           },
         ],
+
+        ...(searchAfter !== null && { search_after: searchAfter }),
       },
     })
     .then((response) => {
@@ -177,17 +196,11 @@ const researchQuestion = (req, res) => {
 const likeQuestion = async (req, res) => {
   const data = {
     _id: req.body._id,
-    userId: req.body.userId,
     likes: req.body.likedQuestion,
   }
 
   const found = await utility.isExisting(data._id)
   if (found) {
-    // const isQuestionLiked = found.likes._id
-
-    // {"where":{"arrayAttribute":{ "all" :[String]}}}
-
-    // const result = await Like.find(found.likes)
     found.likes.forEach((like) => {
       if (like._id === data.likes._id) {
         return res.json({ msg: 'Question already liked' })
