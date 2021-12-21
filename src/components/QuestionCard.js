@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Question from './Question'
 import ResponseSection from './ResponseSection'
 
-const QuestionCard = ({ q, isFavoritePage }) => {
+const QuestionCard = ({ q, isFavoritePage, loadQuestions, pageNumber }) => {
   const [openComment, setOpenComment] = useState(false)
   const [response, setResponse] = useState([])
 
@@ -11,9 +11,9 @@ const QuestionCard = ({ q, isFavoritePage }) => {
   }
 
   useEffect(() => {
-    setResponse(q._source.response)
+    setResponse(q?._source.response)
     return () => {}
-  }, [q._source.response])
+  }, [q?._source.response])
   return (
     <div className=" bg-white shadow-lg rounded-lg">
       <Question
@@ -22,7 +22,12 @@ const QuestionCard = ({ q, isFavoritePage }) => {
         isFavoritePage={isFavoritePage}
       />
       {openComment && (
-        <ResponseSection responseList={response} questionId={q._id} />
+        <ResponseSection
+          pageNumber={pageNumber}
+          responseList={response}
+          questionId={q._id}
+          loadQuestions={loadQuestions}
+        />
       )}
     </div>
   )

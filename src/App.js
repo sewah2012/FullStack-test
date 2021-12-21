@@ -19,7 +19,11 @@ function App() {
         <Nav keycloak={keycloak} />
 
         <Routes>
-          <Route exact path="/" element={<WelcomePage />} />
+          <Route
+            exact
+            path="/"
+            element={isAuth ? <SecuredPage /> : <WelcomePage />}
+          />
           <Route
             path="/home"
             element={

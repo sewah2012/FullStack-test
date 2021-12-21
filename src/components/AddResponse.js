@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useKeycloak } from '@react-keycloak/web'
 import axios from 'axios'
 
-const AddResponse = ({ questionId }) => {
+const AddResponse = ({ questionId, loadQuestions, pageNumber }) => {
   const { keycloak } = useKeycloak()
   const loggedInUser = keycloak.tokenParsed.name
   const [responseText, setResponseText] = useState({
@@ -34,6 +34,7 @@ const AddResponse = ({ questionId }) => {
         if (res) {
           setResponseText({ response: '', author: loggedInUser })
 
+          loadQuestions(pageNumber)
           setaddingQuestion(false)
         }
         setaddingQuestion(false)

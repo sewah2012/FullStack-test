@@ -3,7 +3,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react/cjs/react.development'
 
-const Demande = () => {
+const Demande = ({ loadQuestions }) => {
   const { keycloak } = useKeycloak()
   const loggedInUser = keycloak.tokenParsed.preferred_username
   const [addingQuestion, setAddingQuestion] = useState(false)
@@ -69,7 +69,7 @@ const Demande = () => {
           })
 
           setAddingQuestion(false)
-          window.location.reload(true)
+          loadQuestions(0)
         }
         setAddingQuestion(false)
       })

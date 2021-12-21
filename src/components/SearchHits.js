@@ -6,14 +6,7 @@ const SearchHits = ({ results }) => {
   return (
     <div>
       {results.map((result, ind) => (
-        <QuestionCard
-          key={ind}
-          title={result._source.title}
-          content={result._source.content}
-          ownerId={result._source.ownerId}
-          response={result._source.response}
-          questionId={result._id}
-        />
+        <QuestionCard key={ind} q={result} />
       ))}
     </div>
   )

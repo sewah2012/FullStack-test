@@ -9,7 +9,7 @@ import getQuestions from '../helpers/axiosRequest'
 const Secured = () => {
   const [isLoading, setisLoading] = useState(true)
   const [isSearching, setIsSearching] = useState(false)
-
+  const [pageCount, setPageCount] = useState(1)
   const [questions, setQuestions] = useState([])
   const [searchHits, setSearchHits] = useState([])
 
@@ -18,7 +18,7 @@ const Secured = () => {
     lon: -6.6103882,
   })
 
-  const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}`
+  // const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}`
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       setMyPosition({
@@ -26,7 +26,7 @@ const Secured = () => {
         lon: position.coords.longitude,
       })
     })
-    getQuestions(setQuestions, myPosition, setisLoading)
+    getQuestions(setQuestions, myPosition, setisLoading, setPageCount, 0)
 
     return () => {}
   }, [])
@@ -55,9 +55,9 @@ const Secured = () => {
     setIsSearching(!isSearching)
   }
 
-  const fetchMore = async (sortValue, tieBreaker) => {
+  const fetchMore = async (page) => {
     setisLoading(true)
-    const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}&sortValue=${sortValue}&tieBreaker=${tieBreaker}`
+    const url = `http://localhost:8090/question/research/location?lat=${myPosition.lat}&lon=${myPosition.lon}&page=${page}`
     const response = await axios.get(url)
     if (response) {
       setQuestions(response.data.results)
@@ -66,12 +66,27 @@ const Secured = () => {
       setisLoading(false)
     }
   }
+
+  const loadQuestions = (page) => {
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   setMyPosition({
+    //     lat: position.coords.latitude,
+    //     lon: position.coords.longitude,
+    //   })
+    // })
+    // alert('loading questons')
+    getQuestions(setQuestions, myPosition, setisLoading, setPageCount, page)
+  }
   return (
     <div className="bg-gray-50 pt-5">
       <Search onSearch={onSearch} />
-      {isSearching && <button onClick={closeSearch}>Exit Search </button>}
+      {isSearching && (
+        <div className="mx-auto w-fit mt-5">
+          <button onClick={closeSearch}>Exit Search </button>
+        </div>
+      )}
       <div className="flex p-5 justify-start items-start flex-wrap">
-        <Demande />
+        <Demande loadQuestions={loadQuestions} />
 
         {isSearching ? (
           <SearchHits results={searchHits} />
@@ -79,8 +94,10 @@ const Secured = () => {
           <h1>loading ...</h1>
         ) : (
           <ListeQuestion
+            loadQuestions={loadQuestions}
             fetchMore={fetchMore}
             questions={questions}
+            pageCount={pageCount}
             className="flex-1 mlr-5"
           />
         )}

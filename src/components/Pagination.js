@@ -1,17 +1,25 @@
 import React from 'react'
+import ReactPaginate from 'react-paginate'
 
-const Pagination = ({ fetchMore, searchAfterInfo }) => {
-  const handleMoreClick = () => {
-    fetchMore(searchAfterInfo[0], searchAfterInfo[1])
+const Pagination = ({ fetchMore, pageCount }) => {
+  const handlePageClick = (data) => {
+    fetchMore(data.selected)
+    // alert(data.selected)
   }
 
   return (
-    <div
-      onClick={handleMoreClick}
-      className="cursor-pointer p-3 bg-indigo-300 w-fit rounded mt-3"
-    >
-      <h1>Next Page </h1>
-    </div>
+    <ReactPaginate
+      breakLabel="..."
+      nextLabel="next >"
+      onPageChange={handlePageClick}
+      pageRangeDisplayed={5}
+      pageCount={pageCount}
+      previousLabel="< previous"
+      renderOnZeroPageCount={null}
+      forcePage={pageCount}
+      containerClassName="flex justify-evenly my-5 bg-gray-200 p-3 rounded"
+      activeClassName="bg-gray-200"
+    />
   )
 }
 

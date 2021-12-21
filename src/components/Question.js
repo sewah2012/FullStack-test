@@ -46,10 +46,11 @@ const Question = ({ q, handleOpenComment, isFavoritePage }) => {
               {q._source.title}
             </h2>
 
-            <small className="text-sm text-gray-700">
-              {' '}
-              à {q.sort[0]?.toFixed(2)} km
-            </small>
+            {q.sort && (
+              <small className="text-sm text-gray-700">
+                à {q.sort[0]?.toFixed(2)} km
+              </small>
+            )}
           </div>
 
           <h4 className="text-sm text-gray-700">By: {q._source.ownerId}</h4>
