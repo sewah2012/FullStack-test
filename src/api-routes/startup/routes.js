@@ -30,7 +30,7 @@ export default (app) => {
     res.json({ message: 'Youre hitting the / route.' }),
   )
 
-  app.use('/question', keycloak.protect('user'), questionRouter)
+  app.use('/question', questionRouter)
 }
 
 // keycloak.protect('user')

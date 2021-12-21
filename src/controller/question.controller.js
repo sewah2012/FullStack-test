@@ -23,20 +23,29 @@ const getAllByLocation = async (req, res) => {
   const lon = req.query.lon
   //PIT Test
   let pitId = null
-  let searchAfter = null
+  // let searchAfter = null
+
+  const { body } = await client.count({ index: 'questions' }) //get total number of documents in index
+
+  const totalPages = Math.ceil(body.count / 5)
 
   pitId = await (
     await client.openPointInTime({ index: 'questions', keep_alive: '2m' })
   ).body.id
 
-  if (req.query.sortValue && req.query.tieBreaker) {
-    searchAfter = [req.query.sortValue, req.query.tieBreaker]
-  }
+  // if (req.query.sortValue && req.query.tieBreaker) {
+  //   searchAfter = [req.query.sortValue, req.query.tieBreaker]
+  // }
   client
     .search({
       // index: 'questions',  //no need for index when using PIT
       body: {
+        from: req.query.page * 5,
         size: '5',
+        // slice: {
+        //   id: req.query.page,
+        //   max: totalPages,
+        // },
         track_total_hits: false, // for fast query
         query: {
           match_all: {},
@@ -60,11 +69,11 @@ const getAllByLocation = async (req, res) => {
           },
         ],
 
-        ...(searchAfter !== null && { search_after: searchAfter }),
+        // ...(searchAfter !== null && { search_after: searchAfter }),
       },
     })
     .then((response) => {
-      return res.json({ results: response.body.hits.hits })
+      return res.json({ results: response.body.hits.hits, totalPages })
     })
     .catch((err) => {
       return res.status(500).json({ message: 'Error' })
